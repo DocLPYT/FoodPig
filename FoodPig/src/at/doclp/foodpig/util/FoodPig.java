@@ -54,24 +54,7 @@ public class FoodPig implements CommandExecutor, Listener{
 				if(args[0].equalsIgnoreCase("spawn")) {
 					setFoodPig(p);
 				} else if(args[0].equalsIgnoreCase("setdrop")) {
-					Player player = (Player) sender;
-					if(player.hasPermission("foodpig.admin")){						
-						ItemType = player.getInventory().getItemInMainHand().getType();
-						ItemCount = player.getInventory().getItemInMainHand().getAmount();
-						if(ItemType.equals(Material.AIR)) {
-							player.sendMessage("§cDu kannst Luft nicht als Drop setzen!");
-						}else if(!ItemType.isEdible()){
-							player.sendMessage(ChatColor.RED + "Du kannst nur ESSBARE Items als Drop setzten");
-						}else {							
-							FileConfiguration config = Main.getPlugin().getConfig();
-							config.set("settings.itemtype", player.getInventory().getItemInMainHand().getType().toString());
-							config.set("settings.itemcount", player.getInventory().getItemInMainHand().getAmount());
-							Main.getPlugin().saveConfig();
-							player.sendMessage("§aDie §6Essenssau §adroppt ab jetzt §6" + String.valueOf(config.getInt("settings.itemcount") + "§a Stück §6" + Material.valueOf(config.getString("settings.itemtype"))));
-						}
-					}else {
-						player.sendMessage(config.getString("messages.noperms").replace('&', '§'));
-					}
+					setDrop(p);
 				}else if(args[0].equalsIgnoreCase("default")) {
 					setStandart(p);
 				}else if(args[0].equalsIgnoreCase("killmode")) {
@@ -79,7 +62,7 @@ public class FoodPig implements CommandExecutor, Listener{
 				}else if(args[0].equalsIgnoreCase("xp")) {
 					setXP(p);
 				}else if(args[0].equalsIgnoreCase("reload")){
-					reload(p);
+					reloadConf(p);
 				}
 			}
 			else {
@@ -144,7 +127,7 @@ public class FoodPig implements CommandExecutor, Listener{
 		player.sendMessage(config.getString("messages.noperms").replace('&', '§'));
 		}
 	}
-	public void reload(Player sender) {
+	public void reloadConf(Player sender) {
 		Main.getPlugin().reloadConfig();
 		Main.getPlugin().saveConfig();					
 		String pig_title_before = PIG_TITLE;
@@ -157,10 +140,33 @@ public class FoodPig implements CommandExecutor, Listener{
 					PIG_TITLE = Main.getPlugin().getConfig().getString("settings.pig-name").replace('&', '§');
 					n.remove();
 					spawnFoodPig(loc, p);
+					p.sendMessage("§aConfig neu geladen!");
+			}
+			else {
+				p.sendMessage("§aConfig neu geladen!");	
+				return;
 			}
 		}
-		p.sendMessage("§aConfig neu geladen!");
-		
+	}
+	public void setDrop(Player sender) {
+		Player player = (Player) sender;
+		if(player.hasPermission("foodpig.admin")){						
+			ItemType = player.getInventory().getItemInMainHand().getType();
+			ItemCount = player.getInventory().getItemInMainHand().getAmount();
+			if(ItemType.equals(Material.AIR)) {
+				player.sendMessage("§cDu kannst Luft nicht als Drop setzen!");
+			}else if(!ItemType.isEdible()){
+				player.sendMessage(ChatColor.RED + "Du kannst nur ESSBARE Items als Drop setzten");
+			}else {							
+				FileConfiguration config = Main.getPlugin().getConfig();
+				config.set("settings.itemtype", player.getInventory().getItemInMainHand().getType().toString());
+				config.set("settings.itemcount", player.getInventory().getItemInMainHand().getAmount());
+				Main.getPlugin().saveConfig();
+				player.sendMessage("§aDie §6Essenssau §adroppt ab jetzt §6" + String.valueOf(config.getInt("settings.itemcount") + "§a Stück §6" + Material.valueOf(config.getString("settings.itemtype"))));
+			}
+		}else {
+			player.sendMessage(config.getString("messages.noperms").replace('&', '§'));
+		}
 	}
 	
 	@EventHandler
@@ -385,11 +391,13 @@ public class FoodPig implements CommandExecutor, Listener{
         for(int i=0; i<9; i++) {
         	inv.setItem(i, BlackGlassPane);
         }
-        inv.setItem(11, makeItem(Material.PIG_SPAWN_EGG, ChatColor.GOLD + "Spawn"));
-        inv.setItem(12, makeItem(Material.EXPERIENCE_BOTTLE, ChatColor.GOLD + "XP " + State));
-        inv.setItem(13, makeItem(Material.DIAMOND_SWORD, ChatColor.RED + "Removing Mode " + StateRemove));
-        inv.setItem(14, makeItem(Material.COOKED_BEEF, ChatColor.GREEN + "Standart Drop"));
-        inv.setItem(15, makeItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "Reload Config"));
+        inv.setItem(10, makeItem(Material.PIG_SPAWN_EGG, ChatColor.GOLD + "Spawn"));
+        inv.setItem(11, makeItem(Material.EXPERIENCE_BOTTLE, ChatColor.GOLD + "XP " + State));
+        inv.setItem(12, makeItem(Material.DIAMOND_SWORD, ChatColor.RED + "Removing Mode " + StateRemove));
+        inv.setItem(13, makeItem(Material.COOKED_BEEF, ChatColor.GREEN + "Standart Drop"));
+        inv.setItem(14, makeItem(Material.DROPPER, ChatColor.GREEN + "Setdrop"));
+        inv.setItem(15, makeItem(Material.CHEST_MINECART, ChatColor.GREEN + "Open Drop Selector"));
+        inv.setItem(16, makeItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "Reload Config"));
         for(int i=18; i<28; i++) {
         	inv.setItem(i, BlackGlassPane);
         }
@@ -422,8 +430,15 @@ public class FoodPig implements CommandExecutor, Listener{
 				setStandart(player);
 				player.closeInventory();
 			}
+			if(item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Setdrop")) {
+				setDrop(player);
+				player.closeInventory();
+			}
+			if(item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Open Drop Selector")) {
+				openGui(player);
+			}
 			if(item.getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Reload Config")) {
-				reload(player);
+				reloadConf(player);
 				player.closeInventory();
 			}
 		}
