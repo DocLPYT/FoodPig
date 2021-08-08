@@ -1,0 +1,21 @@
+name: FoodPig
+version: 1.1
+api-version: 1.17
+main: at.doclp.foodpig.main.Main
+
+commands:
+   foodpig:
+      description: "Oeffnet das FoodPig GUI"
+      aliases: [spawn, setdrop, standart, killmode, xp, reload]
+   foodpig spawn:
+      description: spawnt ein FoodPig
+   foodpig setdrop:
+      description: "Setzt den Drop aus der Hand"
+   foodpig default:
+      description: "Setzt den Standart-Drop"
+   foodpig killmode:
+      description: "Lasst dich das FoodPig entfernen"
+   foodpig xp:
+      description: "Aktiviert/Deaktiviert den XP Drop"
+   foodpig reload:
+      description: "Reloaded die Config"

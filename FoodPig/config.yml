@@ -1,0 +1,15 @@
+settings:
+  pig-name: '&6Essenssau'
+  itemtype: COOKED_BEEF
+  itemcount: 3
+  dropxp: true
+messages:
+  noperms: '&6[FoodPig] &cDafuer hast du keine Rechte!.'
+  created: '&6[FoodPig] &aDu hast ein neues &6Essensschwein &aerschaffen!'
+  removed: '&6[FoodPig] &a'
+  removingmodeon: '&6[FoodPig] &a'
+  removingmodeoff: '&6[FoodPig] &a'
+  usage: '&6[FoodPig] &a'
+  reload: '&6[FoodPig] &a'
+  setdrop: '&6[FoodPig] &a'
+  airinhand: '&6[FoodPig] &a'
