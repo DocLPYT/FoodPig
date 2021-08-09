@@ -38,6 +38,7 @@ public class FoodPig implements CommandExecutor, Listener{
 	public void spawnFoodPig(Location location, Player player) {
 		Pig pig = (Pig) location.getWorld().spawnEntity(location, EntityType.PIG);
 		pig.setAI(false);
+		pig.setGravity(true);
 		pig.setHealth(2);
 		pig.setCustomName(PIG_TITLE);
 		pig.setCustomNameVisible(true);
@@ -55,12 +56,23 @@ public class FoodPig implements CommandExecutor, Listener{
 					setDrop(p);
 				}else if(args[0].equalsIgnoreCase("default")) {
 					setDefault(p);
-				}else if(args[0].equalsIgnoreCase("killmode")) {
+				}else if(args[0].equalsIgnoreCase("remove")) {
 					setKillmode(p);
 				}else if(args[0].equalsIgnoreCase("xp")) {
 					setXP(p);
 				}else if(args[0].equalsIgnoreCase("reload")){
 					reloadConf(p);
+				}else if(args[0].equalsIgnoreCase("boat")) {
+					if(Main.getPlugin().getConfig().getBoolean("settings.boat-stealing")) {
+						Main.getPlugin().getConfig().set("settings.boat-stealing", false);
+						Main.getPlugin().saveConfig();
+						p.sendMessage(Main.getPlugin().getConfig().getString("messages.boatstealingoff").replace('&', '§'));
+					}else if(!Main.getPlugin().getConfig().getBoolean("settings.boat-stealing")) {
+						Main.getPlugin().getConfig().set("settings.boat-stealing", true);
+						Main.getPlugin().saveConfig();
+						p.sendMessage(Main.getPlugin().getConfig().getString("messages.boatstealingon").replace('&', '§'));
+					}
+					
 				}else if(args[0].equalsIgnoreCase("help")) {
 					p.sendMessage(Main.getPlugin().getConfig().getString("messages.usage").replace('&', '§'));
 				}
@@ -128,24 +140,9 @@ public class FoodPig implements CommandExecutor, Listener{
 			player.sendMessage(ChatColor.RED + "Das Item in der Config ist ungültig, deshalb wurde der Drop wieder auf Default gesetzt!");
 		}
 		Material item = Material.valueOf(Main.getPlugin().getConfig().getString("settings.itemtype"));
-		if(Main.getPlugin().getConfig().getInt("settings.itemcount") < 0 || Main.getPlugin().getConfig().getInt("settings.itemcount") > 64 ) {
-			Main.getPlugin().getConfig().set("settings.itemcount", 3);
-			
-			
-			
-			
-			
-			
-			
-			//WARNUNG!!! ITEM COUNT Exception funktioniert noch Nicht!
-			
-			
-			
-			
-			
-			
-			
-			
+		if(Main.getPlugin().getConfig().getInt("settings.itemcount") <= 0 || Main.getPlugin().getConfig().getInt("settings.itemcount") > 64 ) {
+			Main.getPlugin().getConfig().set("settings.itemcount", 3);			
+			Main.getPlugin().saveConfig();
 			player.sendMessage(ChatColor.RED + "Das Item in der Config ist ungültig, deshalb wurde der Drop wieder auf Default gesetzt!");
 		}
 		if(!item.isEdible()){
@@ -173,18 +170,19 @@ public class FoodPig implements CommandExecutor, Listener{
 			p.sendMessage(ChatColor.GREEN + "FoodPig Name: " + ChatColor.RESET + Main.getPlugin().getConfig().getString("settings.pig-name").replace('&', '§'));
 			p.sendMessage(ChatColor.GREEN + "FoodPig Item Type: " + ChatColor.RESET + Main.getPlugin().getConfig().getString("settings.itemtype"));
 			p.sendMessage(ChatColor.GREEN + "FoodPig Item Count: " + ChatColor.RESET + Main.getPlugin().getConfig().getInt("settings.itemcount"));
-			if(Main.getPlugin().getConfig().getBoolean("settings.dropxp")) {
+			if(Main.getPlugin().getConfig().getBoolean("settings.dropxp") == true) {
 				p.sendMessage(ChatColor.GREEN + "FoodPig Drop XP: " + ChatColor.GREEN + "ON");
-			}else if (!Main.getPlugin().getConfig().getBoolean("settings.dropxp")) {
+			}else if (Main.getPlugin().getConfig().getBoolean("settings.dropxp") == false) {
 				p.sendMessage(ChatColor.GREEN + "FoodPig Drop XP: " + ChatColor.RED + "OFF");
 			}
-			if(Main.getPlugin().getConfig().getBoolean("settings.boat-stealing")) {
+			if(Main.getPlugin().getConfig().getBoolean("settings.boat-stealing") == true) {
 				p.sendMessage(ChatColor.GREEN + "FoodPig Boat Stealing: " + ChatColor.GREEN + "ON");
-			}else if(!Main.getPlugin().getConfig().getBoolean("settings.boat-stealing")) {
+			}else if(Main.getPlugin().getConfig().getBoolean("settings.boat-stealing") == false) {
 				p.sendMessage(ChatColor.GREEN + "FoodPig Boat Stealing: " + ChatColor.RED + "OFF");
 			}
+			p.sendMessage(ChatColor.GOLD + "------------------------");
 			for(Entity n : p.getWorld().getEntities()) {
-				if(n instanceof Pig && n.getCustomName().equals(pig_title_before)) {
+				if(n instanceof Pig && n.getCustomName() == pig_title_before) {
 					var loc = n.getLocation();
 					PIG_TITLE = Main.getPlugin().getConfig().getString("settings.pig-name").replace('&', '§');
 					n.remove();
@@ -512,13 +510,15 @@ public class FoodPig implements CommandExecutor, Listener{
         for(int i=0; i<9; i++) {
         	inv.setItem(i, BlackGlassPane);
         }
-        inv.setItem(10, makeItem(Material.PIG_SPAWN_EGG, ChatColor.GOLD + "Spawn"));
-        inv.setItem(11, makeItem(Material.EXPERIENCE_BOTTLE, ChatColor.GOLD + "XP " + State));
-        inv.setItem(12, makeItem(Material.DIAMOND_SWORD, ChatColor.RED + "Removing Mode " + StateRemove));
-        inv.setItem(13, makeItem(Material.COOKED_BEEF, ChatColor.GREEN + "Default Settings"));
-        inv.setItem(14, makeItem(Material.DROPPER, ChatColor.GREEN + "Setdrop"));
-        inv.setItem(15, makeItem(Material.CHEST_MINECART, ChatColor.GREEN + "Open Drop Selector"));
-        inv.setItem(16, makeItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "Reload Config"));
+        inv.setItem(9, makeItem(Material.PIG_SPAWN_EGG, ChatColor.GOLD + "Spawn"));
+        inv.setItem(10, makeItem(Material.EXPERIENCE_BOTTLE, ChatColor.GOLD + "XP " + State));
+        inv.setItem(11, makeItem(Material.DIAMOND_SWORD, ChatColor.RED + "Removing Mode " + StateRemove));
+        inv.setItem(12, makeItem(Material.COOKED_BEEF, ChatColor.GREEN + "Default Settings"));
+        inv.setItem(13, makeItem(Material.DROPPER, ChatColor.GREEN + "Setdrop"));
+        inv.setItem(14, makeItem(Material.CHEST_MINECART, ChatColor.GREEN + "Open Drop Selector"));
+        inv.setItem(15, makeItem(Material.OAK_BOAT, ChatColor.GREEN + "Boat Stealing"));
+        inv.setItem(16, makeItem(Material.COMPASS, ChatColor.GREEN + "Help"));
+        inv.setItem(17, makeItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "Reload Config"));
         for(int i=18; i<28; i++) {
         	inv.setItem(i, BlackGlassPane);
         }
@@ -607,6 +607,11 @@ public class FoodPig implements CommandExecutor, Listener{
 
 		}
 		Item1 = Material.valueOf(Main.getPlugin().getConfig().getString("settings.itemtype"));
+		if(Main.getPlugin().getConfig().getInt("settings.itemcount") <= 0 || Main.getPlugin().getConfig().getInt("settings.itemcount") > 64 ) {
+			Main.getPlugin().getConfig().set("settings.itemcount", 3);			
+			Main.getPlugin().saveConfig();
+			player.sendMessage(ChatColor.RED + "Das Item in der Config ist ungültig, deshalb wurde der Drop wieder auf Default gesetzt!");
+		}
 		if(!Item1.isEdible()){
 			Main.getPlugin().getConfig().set("settings.itemtype", Material.COOKED_BEEF.toString());
 			Main.getPlugin().saveConfig();

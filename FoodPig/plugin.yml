@@ -13,9 +13,13 @@ commands:
       description: "Setzt den Drop aus der Hand"
    foodpig default:
       description: "Setzt das Pig auf Default"
-   foodpig killmode:
+   foodpig remove:
       description: "Lasst dich das FoodPig entfernen"
    foodpig xp:
       description: "Aktiviert/Deaktiviert den XP Drop"
    foodpig reload:
       description: "Reloaded die Config"
+   foodpig boat:
+      description: "Aktiviert/Deaktiviert das Boat Stealing"
+   foodpig help:
+      description: "Allgemeine Infos"

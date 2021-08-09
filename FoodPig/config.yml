@@ -10,6 +10,8 @@ messages:
   removed: '&6[FoodPig] &aDu hast ein &6Essensschwein &aentfernt!'
   removingmodeon: '&6[FoodPig] &aDu bist jetzt im &6Removing Mode&a, um ein &6FoodPig &azu entfernen, muss du es Rechtsklicken. Um den &6Removing Mode&a zu deaktivieren: &6/foodpig killmode'
   removingmodeoff: '&6[FoodPig] &aDu bist jetzt &cNICHT &amehr im &6Removing Mode&a, nun kannst du die &6FoodPigs &aganz normal benutzen :). Um den &6Removing Mode&a zu aktivieren: &6/foodpig killmode'
+  boatstealingon: '&6[FoodPig] &aDu hast das &6Boat Stealing &aaktiviert!'
+  boatstealingoff: '&6[FoodPig] &aDu hast das &6Boat Stealing &cdeaktiviert&a!'
   usage: '&6[FoodPig] &aMit dem Command &6/foodpig &aoeffnest du das &6FoodPig GUI'
   reload: '&6[FoodPig] &a'
   setdrop: '&6[FoodPig] &a'
