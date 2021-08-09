@@ -12,7 +12,7 @@ commands:
    foodpig setdrop:
       description: "Setzt den Drop aus der Hand"
    foodpig default:
-      description: "Setzt den Standart-Drop"
+      description: "Setzt das Pig auf Default"
    foodpig killmode:
       description: "Lasst dich das FoodPig entfernen"
    foodpig xp:

@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/Workspace/spigot.jar">
+	<classpathentry kind="lib" path="C:/Users/Samuel/eclipse-workspace/spigot.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

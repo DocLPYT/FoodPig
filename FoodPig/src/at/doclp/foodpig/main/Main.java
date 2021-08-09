@@ -23,7 +23,4 @@ public class Main extends JavaPlugin{
 	public static Main getPlugin() {
 		return plugin;
 	}
-	public static void RlConfig() {
-		plugin.reloadConfig();
-	}
 }
