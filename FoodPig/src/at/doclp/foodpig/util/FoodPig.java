@@ -145,6 +145,12 @@ public class FoodPig implements CommandExecutor, Listener{
 			Main.getPlugin().saveConfig();
 			player.sendMessage(ChatColor.RED + "Das Item in der Config ist ungültig, deshalb wurde der Drop wieder auf Default gesetzt!");
 		}
+		if(item == Material.PUFFERFISH) {
+			Main.getPlugin().getConfig().set("settings.itemtype", "COOKED_BEEF");
+			Main.getPlugin().getConfig().set("settings.itemcount", 3);
+			Main.getPlugin().saveConfig();
+			player.sendMessage(ChatColor.RED + "Willst du jemanden vergiften? Der Drop wurde wieder auf Default gesetzt");
+		}
 		if(!item.isEdible()){
 			Main.getPlugin().getConfig().set("settings.itemtype", Material.COOKED_BEEF.toString());
 			Main.getPlugin().saveConfig();
@@ -200,7 +206,12 @@ public class FoodPig implements CommandExecutor, Listener{
 				player.sendMessage("§cDu kannst Luft nicht als Drop setzen!");
 			}else if(!ItemType.isEdible()){
 				player.sendMessage(ChatColor.RED + "Du kannst nur ESSBARE Items als Drop setzten");
-			}else {							
+			}else if(ItemType.equals(Material.PUFFERFISH)) {
+				Main.getPlugin().getConfig().set("settings.itemtype", "COOKED_BEEF");
+				Main.getPlugin().getConfig().set("settings.itemcount", 3);
+				Main.getPlugin().saveConfig();
+				player.sendMessage(ChatColor.RED + "Willst du jemanden vergiften? Der Drop wurde wieder auf Default gesetzt");
+			}else{							
 				Main.getPlugin().getConfig().set("settings.itemtype", player.getInventory().getItemInMainHand().getType().toString());
 				Main.getPlugin().getConfig().set("settings.itemcount", player.getInventory().getItemInMainHand().getAmount());
 				Main.getPlugin().saveConfig();
@@ -611,6 +622,14 @@ public class FoodPig implements CommandExecutor, Listener{
 			Main.getPlugin().getConfig().set("settings.itemcount", 3);			
 			Main.getPlugin().saveConfig();
 			player.sendMessage(ChatColor.RED + "Das Item in der Config ist ungültig, deshalb wurde der Drop wieder auf Default gesetzt!");
+		}
+		if(Item1 == Material.PUFFERFISH) {
+			Main.getPlugin().getConfig().set("settings.itemtype", "COOKED_BEEF");
+			Main.getPlugin().getConfig().set("settings.itemcount", 3);
+			Main.getPlugin().saveConfig();
+			Item1 = Material.COOKED_BEEF;
+			pig.remove();
+			player.sendMessage(ChatColor.RED + "Willst du jemanden vergiften? Der Drop wurde wieder auf Default gesetzt");
 		}
 		if(!Item1.isEdible()){
 			Main.getPlugin().getConfig().set("settings.itemtype", Material.COOKED_BEEF.toString());
